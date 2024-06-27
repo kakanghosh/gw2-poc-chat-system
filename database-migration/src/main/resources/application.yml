@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: Database Migration
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    jpa:
+      open-in-view: false
+      database-platform: org.hibernate.dialect.MySQLDialect
+      hibernate:
+        ddl-auto: validate
+    liquibase:
+      change-log: classpath:db/changelog/db.changelog-master.xml
