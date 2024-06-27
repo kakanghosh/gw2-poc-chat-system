@@ -1,5 +1,8 @@
 package com.genweb2.emb.configuration;
 
+import com.genweb2.emb.dto.UserOnlineStatusUpdateInput;
+import com.genweb2.emb.service.UserOnlineStatusService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -11,11 +14,13 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+@RequiredArgsConstructor
 @Component
 @Slf4j
 public class SubscriptionInterceptor implements ChannelInterceptor {
 
-    private ConcurrentHashMap<String, Long> sessionIdToUserIdMap = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Long> sessionIdToUserIdMap = new ConcurrentHashMap<>();
+    private final UserOnlineStatusService userOnlineStatusService;
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
@@ -29,9 +34,11 @@ public class SubscriptionInterceptor implements ChannelInterceptor {
             });
         } else if (StompCommand.DISCONNECT.equals(accessor.getCommand())) {
             var sessionId = accessor.getSessionId();
-            var userId = getUserIdBySessionId(sessionId);
-            removeUserBySessionId(sessionId);
-            updateUserOnlineStatus(userId, false);
+            if (sessionIdToUserIdMap.containsKey(sessionId)) {
+                var userId = getUserIdBySessionId(sessionId);
+                removeUserBySessionId(sessionId);
+                updateUserOnlineStatus(userId, false);
+            }
         }
         return message;
     }
@@ -39,6 +46,7 @@ public class SubscriptionInterceptor implements ChannelInterceptor {
 
     private void updateUserOnlineStatus(Long userId, boolean status) {
         log.info("SubscriberId: {}, status: {}", userId, status);
+        userOnlineStatusService.updateUserOnlineStatus(new UserOnlineStatusUpdateInput(userId, status));
     }
 
     private Optional<Long> extractSubscriberId(String destination) {
