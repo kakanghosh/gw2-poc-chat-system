@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
+
+    <changeSet id="seed_user_table" author="Kakan">
+        <sql>
+            INSERT INTO user_entity (first_name, last_name)
+            VALUES
+            ('Jane', 'Doe'),
+            ('Michael', 'Johnson'),
+            ('Sarah', 'Lee'),
+            ('David', 'Miller'),
+            ('Ashley', 'Rodriguez'),
+            ('William', 'Brown'),
+            ('Jennifer', 'Davis'),
+            ('Christopher', 'Clark'),
+            ('Amanda', 'Wilson'),
+            ('Kevin', 'Thomas');
+        </sql>
+    </changeSet>
+    <changeSet id="seed_kingdom_table" author="Kakan">
+        <sql>
+            INSERT INTO kingdom (name)
+            VALUES
+            ('Luminara'),
+            ('Nocturna');
+        </sql>
+    </changeSet>
+    <changeSet id="seed_user_kingdom_table" author="Kakan">
+        <sql>
+            INSERT INTO user_kingdom (user_id,kingdom_id)
+            VALUES
+            (1,1),
+            (2,1),
+            (3,1),
+            (4,1),
+            (5,1),
+            (6,2),
+            (7,2),
+            (8,2),
+            (9,2),
+            (10,2);
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

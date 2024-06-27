@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
+
+    <changeSet id="create_chat_history_table" author="Kakan">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="chat_history"/>
+                <foreignKeyConstraintExists foreignKeyName="fk_user_entity_chat_history_sender_id"/>
+                <foreignKeyConstraintExists foreignKeyName="fk_user_entity_chat_history_receiver_id"/>
+                <foreignKeyConstraintExists foreignKeyName="fk_file_chat_history"/>
+            </not>
+        </preConditions>
+        <createTable tableName="chat_history">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="sender_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="receiver_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content" type="text"/>
+            <column name="file_id" type="bigint"/>
+            <column name="created_at" type="timestamp" defaultValue="now()">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="chat_history" baseColumnNames="sender_id"
+                                 constraintName="fk_user_entity_chat_history_sender_id" referencedTableName="user_entity"
+                                 referencedColumnNames="id" onDelete="CASCADE"/>
+        <addForeignKeyConstraint baseTableName="chat_history" baseColumnNames="receiver_id"
+                                 constraintName="fk_user_entity_chat_history_receiver_id" referencedTableName="user_entity"
+                                 referencedColumnNames="id" onDelete="CASCADE"/>
+        <addForeignKeyConstraint baseTableName="chat_history" baseColumnNames="file_id"
+                                 constraintName="fk_file_chat_history" referencedTableName="file"
+                                 referencedColumnNames="id" onDelete="CASCADE"/>
+    </changeSet>
+
+</databaseChangeLog>

@@ -3,5 +3,10 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
-    <include file="classpath:db/changelog/20240627-create-user-status-table.xml" relativeToChangelogFile="false" />
+    <include file="classpath:db/changelog/20240627-create-user-entity-table.xml" relativeToChangelogFile="false" />
+    <include file="classpath:db/changelog/20240627-create-kingdom-table.xml" relativeToChangelogFile="false" />
+    <include file="classpath:db/changelog/20240627-create-user-kingdom-table.xml" relativeToChangelogFile="false" />
+    <include file="classpath:db/changelog/20240627-create-file-table.xml" relativeToChangelogFile="false" />
+    <include file="classpath:db/changelog/20240627-create-chat-history-table.xml" relativeToChangelogFile="false" />
+    <include file="classpath:db/changelog/20240627-seed-initial-data.xml" relativeToChangelogFile="false" />
 </databaseChangeLog>

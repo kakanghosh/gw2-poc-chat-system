@@ -4,26 +4,32 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
 
-    <changeSet id="create_wish_list" author="Kakan">
+    <changeSet id="create_file_table" author="Kakan">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="wish_list"/>
-                <foreignKeyConstraintExists foreignKeyName="fk_wishlist_customer_id"/>
+                <tableExists tableName="file"/>
+                <foreignKeyConstraintExists foreignKeyName="fk_user_entity_file"/>
             </not>
         </preConditions>
-        <createTable tableName="wish_list">
+        <createTable tableName="file">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="customer_id" type="bigint">
+            <column name="user_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="created_at" type="timestamp">
+            <column name="file_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="file_path" type="varchar(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp" defaultValue="now()">
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addForeignKeyConstraint baseTableName="wish_list" baseColumnNames="customer_id"
-                                 constraintName="fk_wishlist_customer_id" referencedTableName="customer"
+        <addForeignKeyConstraint baseTableName="file" baseColumnNames="user_id"
+                                 constraintName="fk_user_entity_file" referencedTableName="user_entity"
                                  referencedColumnNames="id" onDelete="CASCADE"/>
     </changeSet>
 
