@@ -12,6 +12,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -37,6 +38,6 @@ public class User {
     @Column(nullable = false)
     private Boolean onlineStatus;
 
-    @Column(nullable = false)
+    @CreationTimestamp
     private LocalDateTime createdAt;
 }
