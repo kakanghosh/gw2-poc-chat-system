@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/files")
-public class FileStorageController {
+public class FileTransferController {
 
     private final FileService fileService;
 
