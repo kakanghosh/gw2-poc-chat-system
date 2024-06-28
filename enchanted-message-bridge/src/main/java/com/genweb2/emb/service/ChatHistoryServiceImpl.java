@@ -1,0 +1,58 @@
+package com.genweb2.emb.service;
+
+
+import com.genweb2.emb.dto.request.ChatHistoryRequestInput;
+import com.genweb2.emb.dto.service.ChatHistoryDTO;
+import com.genweb2.emb.dto.service.ChatHistoryWithFileDTO;
+import com.genweb2.emb.dto.service.FileDTO;
+import com.genweb2.emb.repository.ChatHistoryRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+@RequiredArgsConstructor
+@Service
+@Slf4j
+public class ChatHistoryServiceImpl implements ChatHistoryService {
+
+    private final ChatHistoryRepository chatHistoryRepository;
+    private final FileService fileService;
+
+    @Override
+    public List<ChatHistoryWithFileDTO> getChatHistories(ChatHistoryRequestInput chatHistoryRequestInput) {
+        var pageRequest = PageRequest.of(chatHistoryRequestInput.pageNumber(), chatHistoryRequestInput.limit());
+        var histories = chatHistoryRepository.findChatHistories(
+                chatHistoryRequestInput.senderId(),
+                chatHistoryRequestInput.receiverId(),
+                pageRequest
+        );
+        var availableFileIds = histories.stream()
+                                        .map(ChatHistoryDTO::fileId)
+                                        .filter(Objects::nonNull)
+                                        .toList();
+        var fileIdMap = fileService.getFilesByIds(availableFileIds)
+                                   .stream()
+                                   .collect(Collectors.toMap(FileDTO::id, Function.identity()));
+        return histories.stream()
+                        .map(history -> {
+                            var fileDto = Optional.ofNullable(fileIdMap.get(history.fileId()))
+                                                  .map(f -> new FileDTO(f.id(), f.fileName(), f.filePath()))
+                                                  .orElse(null);
+                            return new ChatHistoryWithFileDTO(
+                                    history.id(),
+                                    history.senderId(),
+                                    history.receiverId(),
+                                    history.content(),
+                                    fileDto,
+                                    history.createdAt()
+                            );
+                        }).toList();
+    }
+}
