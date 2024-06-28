@@ -1,6 +1,6 @@
 package com.genweb2.emb.configuration;
 
-import com.genweb2.emb.dto.UserOnlineStatusUpdateInput;
+import com.genweb2.emb.dto.request.UserOnlineStatusUpdateInput;
 import com.genweb2.emb.service.UserOnlineStatusService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +28,7 @@ public class SubscriptionInterceptor implements ChannelInterceptor {
         if (StompCommand.SUBSCRIBE.equals(accessor.getCommand())) {
             var sessionId = accessor.getSessionId();
             var destination = accessor.getDestination();
+            log.info("Destination: {}", destination);
             extractSubscriberId(destination).ifPresent(userId -> {
                 sessionIdToUserIdMap.put(sessionId, userId);
                 updateUserOnlineStatus(userId, true);
