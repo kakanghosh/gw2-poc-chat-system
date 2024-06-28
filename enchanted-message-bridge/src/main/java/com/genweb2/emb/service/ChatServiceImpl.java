@@ -8,6 +8,8 @@ import com.genweb2.emb.dto.service.ChatHistoryWithFileDTO;
 import com.genweb2.emb.dto.service.FileDTO;
 import com.genweb2.emb.entity.ChatHistory;
 import com.genweb2.emb.event.FileTransferCompleteEvent;
+import com.genweb2.emb.exception.InvalidLimitException;
+import com.genweb2.emb.exception.InvalidPageNumberException;
 import com.genweb2.emb.repository.ChatHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.FanoutExchange;
@@ -58,6 +60,7 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public List<ChatHistoryWithFileDTO> getChatHistories(ChatHistoryRequestInput chatHistoryRequestInput) {
+        validateInput(chatHistoryRequestInput);
         var pageRequest = PageRequest.of(chatHistoryRequestInput.pageNumber(), chatHistoryRequestInput.limit());
         var histories = chatHistoryRepository.findChatHistories(
                 chatHistoryRequestInput.senderId(),
@@ -85,6 +88,15 @@ public class ChatServiceImpl implements ChatService {
                                     history.createdAt()
                             );
                         }).toList();
+    }
+
+    private void validateInput(ChatHistoryRequestInput chatHistoryRequestInput) {
+        if (chatHistoryRequestInput.pageNumber() < 0) {
+            throw new InvalidPageNumberException("page number: " + chatHistoryRequestInput.pageNumber());
+        }
+        if (chatHistoryRequestInput.limit() < 1) {
+            throw new InvalidLimitException("limit: " + chatHistoryRequestInput.limit());
+        }
     }
 
     @EventListener
