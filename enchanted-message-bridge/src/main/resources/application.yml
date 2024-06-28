@@ -6,9 +6,13 @@ spring:
     username: ${DATABASE_USERNAME:postgres}
     password: ${DATABASE_PASSWORD:secret}
   jpa:
+    show-sql: ${SHOW_SQL_LOG:false}
     open-in-view: false
     properties:
-      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        use_sql_comments: true
     hibernate:
       ddl-auto: validate
   rabbitmq:
@@ -16,3 +20,16 @@ spring:
     port: ${RABBITMQ_PORT:5672}
     username: ${RABBITMQ_USERNAME:guest}
     password: ${RABBITMQ_PASSWORD:guest}
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: ${HIBERNATE_LOG_LEVEL:INFO}
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+
+file:
+  upload-path: /home/kakan/Workspace/gw2-poc-chat-system/uploads/

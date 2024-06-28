@@ -1,4 +1,12 @@
 package com.genweb2.emb.dto.queue;
 
-public record NewMessage(Long sender, Long receiver, String content) {
+import com.genweb2.emb.dto.service.FileDTO;
+
+import java.time.LocalDateTime;
+
+public record NewMessage(Long sender,
+                         Long receiver,
+                         String content,
+                         FileDTO file,
+                         LocalDateTime createdAt) {
 }

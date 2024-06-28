@@ -25,7 +25,7 @@ public class MessageController {
 
     @MessageMapping("/chat/{senderId}")
     public void onNewMessage(@DestinationVariable Long senderId, @Payload ChatMessage message) {
-        chatService.saveNewMessage(new CreateNewMessageInput(senderId, message.receiverId(), message.content()));
+        chatService.saveNewMessage(new CreateNewMessageInput(senderId, message.receiverId(), message.content(), null));
     }
 
     @MessageMapping("/status/{senderId}/online")
