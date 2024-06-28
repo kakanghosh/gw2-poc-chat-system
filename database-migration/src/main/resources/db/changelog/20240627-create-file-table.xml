@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <databaseChangeLog
-        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
 
     <changeSet id="create_file_table" author="Kakan">
@@ -15,9 +15,6 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="user_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
             <column name="file_name" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
@@ -28,9 +25,6 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addForeignKeyConstraint baseTableName="file" baseColumnNames="user_id"
-                                 constraintName="fk_user_entity_file" referencedTableName="user_entity"
-                                 referencedColumnNames="id" onDelete="CASCADE"/>
     </changeSet>
 
 </databaseChangeLog>
