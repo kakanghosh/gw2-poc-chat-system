@@ -1,9 +1,0 @@
-<div class="kingdom-container">
-  <div class="kingdom-message">Showing users of Kingdom</div>
-  <div *ngFor="let usersInKindom of usersInKingDoms">
-    <div class="kingdom">{{ usersInKindom.kingdom.name }}</div>
-    <div *ngFor="let user of usersInKindom.users">
-      <app-user [user]="user"></app-user>
-    </div>
-  </div>
-</div>
