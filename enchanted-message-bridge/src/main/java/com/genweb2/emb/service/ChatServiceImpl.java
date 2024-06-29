@@ -50,6 +50,7 @@ public class ChatServiceImpl implements ChatService {
                 fanOutMessageContentExchange.getName(),
                 "",
                 new NewMessage(
+                        chatHistory.getId(),
                         chatHistory.getSenderId(),
                         chatHistory.getReceiverId(),
                         chatHistory.getContent(),
@@ -69,6 +70,7 @@ public class ChatServiceImpl implements ChatService {
         var fromReceiver = getCharHistories(receiverId, senderId, pageRequest);
         var concatenatedList = new ArrayList<>(fromSender);
         concatenatedList.addAll(fromReceiver);
+        concatenatedList.sort((a, b) -> b.createdAt().compareTo(a.createdAt()));
         return concatenatedList;
     }
 
