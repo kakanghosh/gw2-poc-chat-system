@@ -19,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -44,7 +45,7 @@ public class ChatServiceImpl implements ChatService {
                                      .fileId(createNewMessageInput.fileId())
                                      .build();
         chatHistoryRepository.save(chatHistory);
-        var fileDto = fileService.getFilesById(chatHistory.getFileId()).orElse(null);
+        var fileDto = fileService.getFilesById(createNewMessageInput.fileId());
         rabbitTemplate.convertAndSend(
                 fanOutMessageContentExchange.getName(),
                 "",
@@ -52,7 +53,7 @@ public class ChatServiceImpl implements ChatService {
                         chatHistory.getSenderId(),
                         chatHistory.getReceiverId(),
                         chatHistory.getContent(),
-                        fileDto,
+                        fileDto.orElse(null),
                         chatHistory.getCreatedAt()
                 )
         );
@@ -62,9 +63,19 @@ public class ChatServiceImpl implements ChatService {
     public List<ChatHistoryWithFileDTO> getChatHistories(ChatHistoryRequestInput chatHistoryRequestInput) {
         validateInput(chatHistoryRequestInput);
         var pageRequest = PageRequest.of(chatHistoryRequestInput.pageNumber(), chatHistoryRequestInput.limit());
+        var senderId = chatHistoryRequestInput.senderId();
+        var receiverId = chatHistoryRequestInput.receiverId();
+        var fromSender = getCharHistories(senderId, receiverId, pageRequest);
+        var fromReceiver = getCharHistories(receiverId, senderId, pageRequest);
+        var concatenatedList = new ArrayList<>(fromSender);
+        concatenatedList.addAll(fromReceiver);
+        return concatenatedList;
+    }
+
+    private List<ChatHistoryWithFileDTO> getCharHistories(Long user1, Long user2, PageRequest pageRequest) {
         var histories = chatHistoryRepository.findChatHistories(
-                chatHistoryRequestInput.senderId(),
-                chatHistoryRequestInput.receiverId(),
+                user1,
+                user2,
                 pageRequest
         );
         var availableFileIds = histories.stream()

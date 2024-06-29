@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -49,6 +50,9 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public Optional<FileDTO> getFilesById(Long fileId) {
+        if (Objects.isNull(fileId)) {
+            return Optional.empty();
+        }
         return fileRepository.findById(fileId)
                              .map(file -> new FileDTO(file.getId(), file.getFileName(), file.getFilePath()));
     }
