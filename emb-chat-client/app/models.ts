@@ -19,3 +19,22 @@ export class User {
     return `${this.firstName} ${this.lastName}`;
   }
 }
+
+export class File {
+  constructor(
+    public id: number,
+    public fileName: string,
+    public filePath: string
+  ) {}
+}
+
+export class ChatMessage {
+  constructor(
+    public id: number,
+    public senderId: number,
+    public receiverId: number,
+    public content: string | null,
+    public file: File | null,
+    public createdAt: Date
+  ) {}
+}

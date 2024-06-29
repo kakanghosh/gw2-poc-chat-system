@@ -6,18 +6,15 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import AdbIcon from '@mui/icons-material/Adb';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import { useGlobalState } from '@/app/context/GlobalStateContext';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 export default function ResponsiveAppBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
-
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
+  const { state, setState } = useGlobalState();
+  const { sender } = state;
 
   return (
     <AppBar position='static'>
@@ -48,7 +45,6 @@ export default function ResponsiveAppBar() {
               aria-label='account of current user'
               aria-controls='menu-appbar'
               aria-haspopup='true'
-              onClick={handleOpenNavMenu}
               color='inherit'
             ></IconButton>
           </Box>
@@ -70,6 +66,21 @@ export default function ResponsiveAppBar() {
           >
             EMB
           </Typography>
+          <Box sx={{ flexGrow: 2 }} />
+          {sender ? (
+            <Box
+              sx={{
+                display: 'flex',
+                width: '10%',
+                justifyContent: 'space-around',
+              }}
+            >
+              <Typography gutterBottom>{sender.firstName}</Typography>
+              <AccountCircle />
+            </Box>
+          ) : (
+            <></>
+          )}
         </Toolbar>
       </Container>
     </AppBar>

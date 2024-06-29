@@ -10,11 +10,6 @@ export default function UserDisplay({ user }: { user: User }) {
   return (
     <div style={{ display: 'flex' }}>
       {user.getFullName()} {user.onlineStatus ? 'online' : 'Offline'}{' '}
-      {/* <Switch
-        {...label}
-        checked={selected}
-        onClick={() => setSelected(!selected)}
-      /> */}
     </div>
   );
 }

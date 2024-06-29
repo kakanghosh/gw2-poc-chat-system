@@ -4,10 +4,36 @@ import ChatBox from '@/app/components/ChatBox';
 import UsersBox from '@/app/components/UsersBox';
 import { Grid } from '@mui/material';
 import Box from '@mui/material/Box';
+import { useGlobalState } from '@/app/context/GlobalStateContext';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function ChatWindow() {
+  const { state, setState } = useGlobalState();
+  const router = useRouter();
+  const { sender, receiver } = state;
+  const [showChatBox, setShowChatBox] = useState(false);
+
+  useEffect(() => {
+    if (sender) {
+      // Connect to socket
+    }
+  }, [sender]);
+
+  useEffect(() => {
+    if (!sender) {
+      router.push('/');
+    }
+  }, [sender, router]);
+
+  useEffect(() => {
+    if (sender && receiver) {
+      setShowChatBox(true);
+    }
+  }, [sender, receiver]);
+
   return (
-    <main>
+    <Box>
       <ResponsiveAppBar />
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
@@ -15,10 +41,14 @@ export default function ChatWindow() {
             <UsersBox />
           </Grid>
           <Grid item xs={8}>
-            <ChatBox />
+            {showChatBox ? (
+              <ChatBox />
+            ) : (
+              <Box>Select user to start messaging</Box>
+            )}
           </Grid>
         </Grid>
       </Box>
-    </main>
+    </Box>
   );
 }

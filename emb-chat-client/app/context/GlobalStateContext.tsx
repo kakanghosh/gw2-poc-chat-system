@@ -1,12 +1,15 @@
 'use client';
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { Kingdom, User, WelcomeMessage } from '../models';
+import { ChatMessage, Kingdom, User, WelcomeMessage } from '../models';
 
 export interface StateDef {
   message: WelcomeMessage;
   users: User[];
   kingdoms: Kingdom[];
+  sender?: User;
+  receiver?: User;
+  chatMessages: ChatMessage[];
 }
 
 interface GlobalStateContextProps {
@@ -20,12 +23,13 @@ const GlobalStateContext = createContext<GlobalStateContextProps | undefined>(
 
 export const GlobalStateProvider = ({ children }: { children: ReactNode }) => {
   const [state, setState] = useState<StateDef>({
-    users: [new User(new Kingdom(1, 'ABC'), 1, 'Kakan', 'Ghosh', false)],
+    users: [],
     message: new WelcomeMessage(
-      'Greetings, Brave Adventurers of Luminara and Nocturna',
+      'Greetings, Brave Adventurers of',
       'We are thrilled to announce that your latest quest has been a resounding success'
     ),
     kingdoms: [],
+    chatMessages: [],
   });
 
   return (

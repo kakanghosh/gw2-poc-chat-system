@@ -9,10 +9,13 @@ export default function ChatApp() {
     <Box sx={{ flexGrow: 1 }}>
       <ResponsiveAppBar />
       <Box
-        display='flex'
-        flexDirection='column'
-        justifyContent='center'
-        alignItems='center'
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginTop: '5%',
+        }}
       >
         <BridgeMessage />
         <GetStartedUserSelect />
