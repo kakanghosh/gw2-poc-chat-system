@@ -32,3 +32,7 @@ logging:
 
 file:
   upload-path: /home/kakan/Workspace/gw2-poc-chat-system/uploads/
+
+web:
+  config:
+    allowed-origins: http://localhost:4200
