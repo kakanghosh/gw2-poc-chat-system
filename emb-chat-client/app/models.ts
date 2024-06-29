@@ -38,3 +38,7 @@ export class ChatMessage {
     public createdAt: Date
   ) {}
 }
+
+export class UserStatus {
+  constructor(public userId: number, public status: boolean) {}
+}

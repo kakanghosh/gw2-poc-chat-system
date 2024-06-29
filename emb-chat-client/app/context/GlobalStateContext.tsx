@@ -1,9 +1,11 @@
 'use client';
 
+import { Client } from '@stomp/stompjs';
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { ChatMessage, Kingdom, User, WelcomeMessage } from '../models';
 
 export interface StateDef {
+  stompClient?: Client | null;
   message: WelcomeMessage;
   users: User[];
   kingdoms: Kingdom[];
