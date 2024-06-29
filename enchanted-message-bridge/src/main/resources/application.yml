@@ -35,4 +35,4 @@ file:
 
 web:
   config:
-    allowed-origins: http://localhost:4200
+    allowed-origins: http://localhost:3000
