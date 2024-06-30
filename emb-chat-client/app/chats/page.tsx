@@ -44,10 +44,9 @@ export default function ChatWindow() {
 
           client.subscribe(`/emb-topic/chat/${sender.id}`, (message) => {
             const chatMessage: ChatMessage = JSON.parse(message.body);
-            console.log('chatMessage', chatMessage);
             setState((prev) => ({
               ...prev,
-              chatMessages: [...prev.chatMessages, chatMessage],
+              chatMessages: [chatMessage, ...prev.chatMessages],
             }));
           });
 

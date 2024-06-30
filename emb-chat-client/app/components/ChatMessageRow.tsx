@@ -25,7 +25,7 @@ export default function ChatMessageRow({
       );
     }
     if (othersMessage) {
-      return `${receiver.firstName} ${message.content}`;
+      return `[${receiver.firstName}] -  ${message.content}`;
     }
     return `${message.content}`;
   }

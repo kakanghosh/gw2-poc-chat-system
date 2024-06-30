@@ -5,8 +5,8 @@ import com.genweb2.emb.dto.service.FileDTO;
 import java.time.LocalDateTime;
 
 public record NewMessage(Long id,
-                         Long sender,
-                         Long receiver,
+                         Long senderId,
+                         Long receiverId,
                          String content,
                          FileDTO file,
                          LocalDateTime createdAt) {

@@ -10,7 +10,8 @@ export default function ChatHistoryView() {
   function produceChatMessageView() {
     return chatMessages.map((message) => {
       const contentDirection =
-        sender?.id == message.senderId ? 'flex-end' : 'flex-start';
+        sender!.id == message.senderId ? 'flex-end' : 'flex-start';
+
       return (
         <Box
           key={message.id}
@@ -23,7 +24,7 @@ export default function ChatHistoryView() {
           }}
         >
           <ChatMessageRow
-            ownMessage={sender?.id == message.senderId}
+            ownMessage={sender!.id == message.senderId}
             message={message}
             sender={sender!}
             receiver={receiver!}

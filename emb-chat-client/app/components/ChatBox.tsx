@@ -7,7 +7,7 @@ import { ChatMessage, User } from '../models';
 
 export default function ChatBox() {
   const { state, setState } = useGlobalState();
-  const { sender, receiver } = state;
+  const { sender, receiver, chatMessages } = state;
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -15,7 +15,7 @@ export default function ChatBox() {
     if (chatContainer) {
       chatContainer.scrollTop = chatContainer.scrollHeight;
     }
-  }, []);
+  }, [chatMessages]);
 
   useEffect(() => {
     if (sender && receiver) {
@@ -31,7 +31,7 @@ export default function ChatBox() {
     var { histories }: { histories: ChatMessage[] } = await response.json();
     setState((prev) => ({
       ...prev,
-      chatMessages: [...prev.chatMessages, ...histories],
+      chatMessages: [...histories],
     }));
   }
 

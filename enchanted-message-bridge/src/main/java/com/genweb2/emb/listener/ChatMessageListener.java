@@ -16,10 +16,10 @@ import java.util.List;
 public class ChatMessageListener {
 
     private final SimpMessagingTemplate simpMessagingTemplate;
-    
+
     @RabbitListener(queues = "#{messageContentQueue.name}")
     public void newMessageListener(NewMessage message) {
-        List.of(prepareDestination(message.sender()), prepareDestination(message.receiver()))
+        List.of(prepareDestination(message.senderId()), prepareDestination(message.receiverId()))
             .parallelStream()
             .forEach(destination -> simpMessagingTemplate.convertAndSend(destination, message));
     }
