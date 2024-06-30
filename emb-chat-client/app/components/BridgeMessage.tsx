@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect } from 'react';
 import { useGlobalState } from '@/app/context/GlobalStateContext';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Unstable_Grid2';
-import { Kingdom } from '../models';
+import { Kingdom } from '@/app/models';
+import useFetch from '@/app/hooks/useFetch';
 
 export default function BridgeMessage() {
   const { state, setState } = useGlobalState();
   const { kingdoms } = state;
   const { title, description } = state.message;
-  const [ultimeTitle, setUltimeTitle] = useState(title);
+  const { data } = useFetch<{ kingdoms: Kingdom[] }>(
+    'http://localhost:8080/api/v1/kingdoms'
+  );
 
   function concatenateWithAnd(arr: string[]) {
     if (arr.length === 0) {
@@ -27,16 +30,11 @@ export default function BridgeMessage() {
     return `${arr.join(', ')} & ${lastElement}`;
   }
 
-  async function getAllKingdoms() {
-    const response = await fetch('http://localhost:8080/api/v1/kingdoms');
-    var { kingdoms }: { kingdoms: Kingdom[] } = await response.json();
-    setState((prev) => ({ ...prev, kingdoms }));
-  }
-
   useEffect(() => {
-    getAllKingdoms();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (data?.kingdoms) {
+      setState((prev) => ({ ...prev, kingdoms: data?.kingdoms }));
+    }
+  }, [data]);
 
   return (
     <Box sx={{ flexGrow: 1 }}>

@@ -42,3 +42,9 @@ export class ChatMessage {
 export class UserStatus {
   constructor(public userId: number, public status: boolean) {}
 }
+
+export type UseFetchState<T> = {
+  data: T | null;
+  loading: boolean;
+  error: Error | null;
+};

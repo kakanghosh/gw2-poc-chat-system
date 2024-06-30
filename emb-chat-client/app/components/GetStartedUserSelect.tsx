@@ -1,47 +1,25 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Avatar, Box, Button, Chip, Stack, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useGlobalState } from '@/app/context/GlobalStateContext';
-import { Kingdom, User } from '@/app/models';
+import { User } from '@/app/models';
 import Link from 'next/link';
+import useFetchUsersInKingdoms from '../hooks/useFetchUsersInKingdoms';
 
 export default function GetStartedUserSelect() {
   const { state, setState } = useGlobalState();
   const { users, kingdoms, sender } = state;
-
-  async function fetchAllUserOfAllKingdoms(kingdoms: Kingdom[]) {
-    const urls: string[] = kingdoms.map(
-      (kingdom) => `http://localhost:8080/api/v1/users/kingdoms/${kingdom.id}`
-    );
-    const results = await Promise.all(
-      urls.map(async (url) => await fetch(url))
-    );
-    const mappedUsers: User[] = [];
-    for (let i = 0; i < results.length; i++) {
-      const { users }: { users: User[] } = await results[i].json();
-      mappedUsers.push(
-        ...users.map(
-          (user) =>
-            new User(
-              kingdoms[i],
-              user.id,
-              user.firstName,
-              user.lastName,
-              user.onlineStatus
-            )
-        )
-      );
-    }
-    setState((prev) => ({ ...prev, users: mappedUsers }));
-  }
+  const { data } = useFetchUsersInKingdoms(kingdoms);
 
   function selectAsYou(user: User) {
     setState((prev) => ({ ...prev, sender: user }));
   }
 
   useEffect(() => {
-    fetchAllUserOfAllKingdoms(kingdoms);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [kingdoms]);
+    if (data) {
+      setState((prev) => ({ ...prev, users: data }));
+    }
+  }, [data]);
 
   return (
     <Box

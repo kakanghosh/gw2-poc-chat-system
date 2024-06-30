@@ -7,7 +7,7 @@ import { ChatMessage, User } from '../models';
 
 export default function ChatBox() {
   const { state, setState } = useGlobalState();
-  const { sender, receiver, chatMessages } = state;
+  const { sender, receiver } = state;
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -29,7 +29,10 @@ export default function ChatBox() {
       `http://localhost:8080/api/v1/chats/senders/${sender.id}/receivers/${receiver?.id}?pageNumber=0&limit=10`
     );
     var { histories }: { histories: ChatMessage[] } = await response.json();
-    setState((prev) => ({ ...prev, chatMessages: histories }));
+    setState((prev) => ({
+      ...prev,
+      chatMessages: [...prev.chatMessages, ...histories],
+    }));
   }
 
   return (
@@ -52,11 +55,7 @@ export default function ChatBox() {
         }}
         ref={chatContainerRef}
       >
-        <ChatHistoryView
-          chatMessages={chatMessages}
-          sender={sender!}
-          receiver={receiver!}
-        />
+        <ChatHistoryView />
       </Box>
       <Box sx={{ height: '10%', backgroundColor: 'white' }}>
         <WriteMessageBox />

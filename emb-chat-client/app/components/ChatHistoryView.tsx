@@ -1,18 +1,12 @@
 import { Box } from '@mui/material';
 import React from 'react';
 import ChatMessageRow from '@/app/components/ChatMessageRow';
+import { useGlobalState } from '@/app/context/GlobalStateContext';
 
-import { ChatMessage, User } from '../models';
+export default function ChatHistoryView() {
+  const { state } = useGlobalState();
+  const { sender, receiver, chatMessages } = state;
 
-export default function ChatHistoryView({
-  chatMessages,
-  sender,
-  receiver,
-}: {
-  chatMessages: ChatMessage[];
-  sender: User;
-  receiver: User;
-}) {
   function produceChatMessageView() {
     return chatMessages.map((message) => {
       const contentDirection =
@@ -31,8 +25,8 @@ export default function ChatHistoryView({
           <ChatMessageRow
             ownMessage={sender?.id == message.senderId}
             message={message}
-            sender={sender}
-            receiver={receiver}
+            sender={sender!}
+            receiver={receiver!}
           />
         </Box>
       );

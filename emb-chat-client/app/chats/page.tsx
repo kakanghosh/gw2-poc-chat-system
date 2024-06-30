@@ -13,7 +13,7 @@ import { ChatMessage, UserStatus } from '../models';
 export default function ChatWindow() {
   const { state, setState } = useGlobalState();
   const router = useRouter();
-  const { sender, receiver, users, chatMessages } = state;
+  const { sender, receiver } = state;
   const [showChatBox, setShowChatBox] = useState(false);
 
   useEffect(() => {
@@ -21,28 +21,33 @@ export default function ChatWindow() {
       const client = new Client({
         brokerURL: 'ws://localhost:8080/message-bridge',
         onConnect: () => {
+          setState((prev) => ({
+            ...prev,
+            stompClient: client,
+          }));
+
           client.subscribe(`/emb-topic/status/${sender.id}`, (message) => {
             const userStatus: UserStatus = JSON.parse(message.body);
-            const onlinedUser = users.find(
-              (user) => user.id == userStatus.userId
-            );
-            if (onlinedUser) {
-              onlinedUser.onlineStatus = userStatus.status;
-            }
-            setState((prev) => ({
-              ...prev,
-              stompClient: client,
-              users: [...users],
-            }));
+            setState((prev) => {
+              const onlinedUser = prev.users.find(
+                (user) => user.id == userStatus.userId
+              );
+              if (onlinedUser) {
+                onlinedUser.onlineStatus = userStatus.status;
+              }
+              return {
+                ...prev,
+                users: [...prev.users],
+              };
+            });
           });
 
           client.subscribe(`/emb-topic/chat/${sender.id}`, (message) => {
             const chatMessage: ChatMessage = JSON.parse(message.body);
             console.log('chatMessage', chatMessage);
-            chatMessages.push(chatMessage);
             setState((prev) => ({
               ...prev,
-              chatMessages: [...chatMessages],
+              chatMessages: [...prev.chatMessages, chatMessage],
             }));
           });
 

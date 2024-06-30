@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import List from '@mui/material/List';
@@ -10,15 +11,23 @@ import UserDisplay from '@/app/components/UserDisplay';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import { User } from '../models';
+import useFetchUsersInKingdoms from '@/app/hooks/useFetchUsersInKingdoms';
 
 export default function UsersBox() {
   const { state, setState } = useGlobalState();
-  const { users, sender, receiver } = state;
+  const { users, sender, receiver, kingdoms } = state;
+  const { data } = useFetchUsersInKingdoms(kingdoms);
   const mappedUsers = users.filter((user) => user.id != sender?.id);
 
   function selectReceiverUser(receiver: User) {
     setState((prev) => ({ ...prev, receiver }));
   }
+
+  useEffect(() => {
+    if (data) {
+      setState((prev) => ({ ...prev, users: data }));
+    }
+  }, [data]);
 
   return (
     <Box
