@@ -11,10 +11,14 @@ export default function ChatWindow() {
   const { sender, receiver } = state;
 
   useEffect(() => {
-    if (!sender) {
+    setState((prev) => ({ ...prev, chatMessages: [] }));
+  }, []);
+
+  useEffect(() => {
+    if (!sender || !receiver) {
       router.push('/');
     }
-  }, [sender, router]);
+  }, [sender, receiver, router]);
 
   return (
     <ChatWindowWrapper>

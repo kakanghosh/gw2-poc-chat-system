@@ -1,7 +1,8 @@
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import React from 'react';
+import Loading from './components/loading/Loading';
 
-export default function Loading() {
+export default function LoadingScreen() {
   return (
     <Box
       sx={{
@@ -9,12 +10,12 @@ export default function Loading() {
         width: '100wh',
         display: 'flex',
         justifyContent: 'center',
-        justifyItems: 'center',
+        alignItems: 'center',
+        backgroundColor: '#1b446de3',
+        color: '#1b446de3',
       }}
     >
-      <Typography variant='h4' gutterBottom>
-        Loading...
-      </Typography>
+      <Loading />
     </Box>
   );
 }

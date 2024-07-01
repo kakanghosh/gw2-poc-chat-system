@@ -9,13 +9,18 @@ export default function ChatBox() {
   const { state, setState } = useGlobalState();
   const { sender, receiver, chatMessages } = state;
   const chatContainerRef = useRef<HTMLDivElement>(null);
-  const [pageNumber, setPageNumber] = useState(0);
+  const [pageNumber, setPageNumber] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [hasNext, setHasNext] = useState(false);
+  const gotoTop = useRef(true);
 
   useEffect(() => {
     const chatContainer = chatContainerRef.current;
-    if (chatContainer) {
+    if (chatContainer && gotoTop.current) {
       chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+    if (!gotoTop.current) {
+      gotoTop.current = true;
     }
   }, [chatMessages]);
 
@@ -29,11 +34,35 @@ export default function ChatBox() {
     const response = await fetch(
       `http://localhost:8080/api/v1/chats/senders/${sender.id}/receivers/${receiver?.id}?pageNumber=${pageNumber}&limit=${limit}`
     );
-    var { histories }: { histories: ChatMessage[] } = await response.json();
-    setState((prev) => ({
-      ...prev,
-      chatMessages: [...prev.chatMessages, ...histories],
-    }));
+    var { histories, total }: { histories: ChatMessage[]; total: number } =
+      await response.json();
+
+    setHasNext(pageNumber < total);
+
+    setState((prev) => {
+      const messages = [...prev.chatMessages, ...histories];
+      const uniqueArray: ChatMessage[] = [];
+      const set = new Set();
+      for (let message of messages) {
+        if (!set.has(message.id)) {
+          uniqueArray.push(message);
+          set.add(message.id);
+        }
+      }
+      return {
+        ...prev,
+        chatMessages: uniqueArray,
+      };
+    });
+
+    setPageNumber((prev) => pageNumber + 1);
+  }
+
+  async function loadMoreMessage() {
+    if (sender && receiver) {
+      gotoTop.current = false;
+      getChatHistory(sender, receiver);
+    }
   }
 
   return (
@@ -55,7 +84,7 @@ export default function ChatBox() {
         }}
         ref={chatContainerRef}
       >
-        <ChatHistoryView />
+        <ChatHistoryView hasNext={hasNext} loadMoreMessage={loadMoreMessage} />
       </Box>
     </Box>
   );

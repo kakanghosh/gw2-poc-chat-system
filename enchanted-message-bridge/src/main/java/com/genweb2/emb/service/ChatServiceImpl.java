@@ -3,6 +3,7 @@ package com.genweb2.emb.service;
 import com.genweb2.emb.dto.queue.NewMessage;
 import com.genweb2.emb.dto.request.ChatHistoryRequestInput;
 import com.genweb2.emb.dto.request.CreateNewMessageInput;
+import com.genweb2.emb.dto.response.ChatHistoryResponse;
 import com.genweb2.emb.dto.service.ChatHistoryDTO;
 import com.genweb2.emb.dto.service.ChatHistoryWithFileDTO;
 import com.genweb2.emb.dto.service.FileDTO;
@@ -19,7 +20,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -61,17 +61,15 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public List<ChatHistoryWithFileDTO> getChatHistories(ChatHistoryRequestInput chatHistoryRequestInput) {
+    public ChatHistoryResponse getChatHistories(ChatHistoryRequestInput chatHistoryRequestInput) {
         validateInput(chatHistoryRequestInput);
-        var pageRequest = PageRequest.of(chatHistoryRequestInput.pageNumber(), chatHistoryRequestInput.limit());
+        var pageRequest = PageRequest.of(Math.max(0, chatHistoryRequestInput.pageNumber() - 1), chatHistoryRequestInput.limit());
         var senderId = chatHistoryRequestInput.senderId();
         var receiverId = chatHistoryRequestInput.receiverId();
-        var fromSender = getCharHistories(senderId, receiverId, pageRequest);
-        var fromReceiver = getCharHistories(receiverId, senderId, pageRequest);
-        var concatenatedList = new ArrayList<>(fromSender);
-        concatenatedList.addAll(fromReceiver);
-        concatenatedList.sort((a, b) -> b.createdAt().compareTo(a.createdAt()));
-        return concatenatedList;
+        var chatHistories = getCharHistories(senderId, receiverId, pageRequest);
+        var count = chatHistoryRepository.countChatHistories(senderId, receiverId);
+        var total = (count / chatHistoryRequestInput.limit()) + (count % chatHistoryRequestInput.limit() > 0 ? 1 : 0);
+        return new ChatHistoryResponse(chatHistories, chatHistoryRequestInput.pageNumber(), chatHistoryRequestInput.limit(), total);
     }
 
     private List<ChatHistoryWithFileDTO> getCharHistories(Long user1, Long user2, PageRequest pageRequest) {

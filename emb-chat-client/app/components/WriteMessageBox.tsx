@@ -1,8 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Button, TextField } from '@mui/material';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SendTwoToneIcon from '@mui/icons-material/SendTwoTone';
-import AttachFileTwoToneIcon from '@mui/icons-material/AttachFileTwoTone';
 import { useGlobalState } from '@/app/context/GlobalStateContext';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
@@ -73,13 +72,10 @@ export default function WriteMessageBox() {
     setMessage('');
   }
 
-  function uploadFile() {
-    // setMessage('');
-  }
-
   return (
     <Box
       sx={{
+        margin: '5px',
         display: 'flex',
         justifyContent: 'space-between',
         justifyItems: 'space-between',

@@ -6,5 +6,6 @@ import java.util.List;
 
 public record ChatHistoryResponse(List<ChatHistoryWithFileDTO> histories,
                                   Integer pageNumber,
-                                  Integer limit) {
+                                  Integer limit,
+                                  Long total) {
 }

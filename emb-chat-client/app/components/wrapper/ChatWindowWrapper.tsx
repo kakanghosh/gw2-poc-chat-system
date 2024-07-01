@@ -3,6 +3,7 @@ import React from 'react';
 import HeaderMessage from '../header/HeaderMessage';
 import WriteMessageBox from '../WriteMessageBox';
 import useReadyToSendMesage from '@/app/hooks/useReadyToSendMesage';
+import styles from '@/app/styles/Watermark.module.css';
 
 export default function ChatWindowWrapper({
   children,
@@ -13,12 +14,12 @@ export default function ChatWindowWrapper({
 
   return (
     <Box
-      className='root-container'
+      className={`root-container`}
       sx={{
         width: '100vw',
         height: '100vh',
         minWidth: '800px',
-        backgroundColor: '#fdf7f7',
+        backgroundColor: '#1b446de3',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -31,8 +32,9 @@ export default function ChatWindowWrapper({
           minWidth: '380px',
           height: '480px',
           backgroundColor: 'white',
-          border: '2px solid #fff',
           boxShadow: '1px 0px 5px 0px rgba(0, 0, 0, 0.5)',
+          borderRadius: '10px',
+          border: '1px solid black',
         }}
       >
         <Box
@@ -44,6 +46,7 @@ export default function ChatWindowWrapper({
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
+            borderRadius: '10px',
           }}
         >
           <Box>

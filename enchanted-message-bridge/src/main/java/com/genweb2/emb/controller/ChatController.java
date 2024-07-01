@@ -24,6 +24,6 @@ public class ChatController {
                                                                 @RequestParam Integer pageNumber,
                                                                 @RequestParam Integer limit) {
         var chatHistories = chatService.getChatHistories(new ChatHistoryRequestInput(senderId, receiverId, pageNumber, limit));
-        return ResponseEntity.ok(new ChatHistoryResponse(chatHistories, pageNumber, limit));
+        return ResponseEntity.ok(chatHistories);
     }
 }
