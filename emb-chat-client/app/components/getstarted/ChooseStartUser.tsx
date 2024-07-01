@@ -1,63 +1,73 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from 'react';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import List from '@mui/material/List';
+import useFetch from '@/app/hooks/useFetch';
+import { Kingdom, User } from '@/app/models';
+import {
+  Avatar,
+  Box,
+  Divider,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Typography,
+} from '@mui/material';
 import { useGlobalState } from '@/app/context/GlobalStateContext';
-import { ListItem, ListItemAvatar } from '@mui/material';
-import Avatar from '@mui/material/Avatar';
-import ListItemText from '@mui/material/ListItemText';
-import UserDisplay from '@/app/components/UserDisplay';
-import Divider from '@mui/material/Divider';
-import Typography from '@mui/material/Typography';
-import { User } from '../models';
+import React, { useEffect, useState } from 'react';
 import useFetchUsersInKingdoms from '@/app/hooks/useFetchUsersInKingdoms';
+import { useRouter } from 'next/navigation';
 
-export default function UsersBox() {
+export default function ChooseStartUser() {
+  const router = useRouter();
   const { state, setState } = useGlobalState();
-  const { users, sender, receiver, kingdoms } = state;
-  const { data } = useFetchUsersInKingdoms(kingdoms);
-  const mappedUsers = users.filter((user) => user.id != sender?.id);
-
-  function selectReceiverUser(receiver: User) {
-    setState((prev) => ({ ...prev, receiver }));
-  }
+  const { kingdoms } = state;
+  const { data } = useFetch<{ kingdoms: Kingdom[] }>(
+    'http://localhost:8080/api/v1/kingdoms'
+  );
+  const { data: users } = useFetchUsersInKingdoms(kingdoms);
 
   useEffect(() => {
-    if (data) {
-      setState((prev) => ({ ...prev, users: data }));
+    setState((prev) => ({ ...prev, sender: null }));
+  }, []);
+
+  useEffect(() => {
+    if (data?.kingdoms) {
+      setState((prev) => ({ ...prev, kingdoms: data?.kingdoms }));
     }
   }, [data]);
 
+  useEffect(() => {
+    if (users) {
+      setState((prev) => ({ ...prev, users }));
+    }
+  }, [users]);
+
+  function onSelectUser(user: User) {
+    setTimeout(() => {
+      router.push('/receiver');
+      setState((prev) => ({ ...prev, sender: user }));
+    }, 200);
+  }
+
   return (
-    <Box
-      sx={{
-        flexGrow: 1,
-        height: '90vh',
-        overflow: 'scroll',
-        overflowX: 'hidden',
-      }}
-    >
-      <Container maxWidth='sm'>
+    <Box>
+      <Box>
         <List
           sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
         >
-          {mappedUsers.map((user) => (
+          {users?.map((user) => (
             <Box
+              onClick={() => onSelectUser(user)}
               sx={{
                 cursor: 'pointer',
-                backgroundColor:
-                  receiver && receiver.id == user.id ? '#bcdbff' : '',
               }}
               key={user.id}
-              onClick={() => selectReceiverUser(user)}
             >
               <ListItem alignItems='flex-start'>
                 <ListItemAvatar>
                   <Avatar alt={user.firstName} />
                 </ListItemAvatar>
                 <ListItemText
-                  primary={<UserDisplay user={user} />}
+                  primary={user.getFullName()}
                   secondary={
                     <React.Fragment>
                       <Typography
@@ -77,7 +87,7 @@ export default function UsersBox() {
             </Box>
           ))}
         </List>
-      </Container>
+      </Box>
     </Box>
   );
 }

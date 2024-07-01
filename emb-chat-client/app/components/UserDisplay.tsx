@@ -6,8 +6,6 @@ import { Box, Grid } from '@mui/material';
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 export default function UserDisplay({ user }: { user: User }) {
-  const [selected, setSelected] = React.useState(false);
-
   return (
     <Box>
       <Grid container columnGap={2}>

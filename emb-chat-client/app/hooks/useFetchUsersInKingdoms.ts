@@ -32,6 +32,15 @@ function useFetchUsersInKingdoms(kingdoms: Kingdom[]): UseFetchState<User[]> {
             )
           );
         }
+        mappedUsers.sort((a, b) => {
+          if (a.firstName < b.firstName) {
+            return -1;
+          }
+          if (a.firstName > b.firstName) {
+            return 1;
+          }
+          return 0;
+        });
         setData(mappedUsers);
       } catch (error) {
         setError(error as Error);

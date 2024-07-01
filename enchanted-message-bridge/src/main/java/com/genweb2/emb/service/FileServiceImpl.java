@@ -10,11 +10,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -83,5 +87,15 @@ public class FileServiceImpl implements FileService {
         } catch (IOException e) {
             log.error("failed to transfer file", e);
         }
+    }
+
+    @Override
+    public Resource getFileResource(Long fileId) {
+        var fileOptional = fileRepository.findById(fileId);
+        if (fileOptional.isPresent()) {
+            Path filePath = Paths.get(fileOptional.get().getFilePath());
+            return new FileSystemResource(filePath.toFile());
+        }
+        return null;
     }
 }

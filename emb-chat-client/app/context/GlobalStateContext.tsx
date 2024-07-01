@@ -9,8 +9,8 @@ export interface StateDef {
   message: WelcomeMessage;
   users: User[];
   kingdoms: Kingdom[];
-  sender?: User;
-  receiver?: User;
+  sender?: User | null;
+  receiver?: User | null;
   chatMessages: ChatMessage[];
 }
 
