@@ -46,10 +46,18 @@ to start the external services and application
 docker compose -f services-docker-compose.yml -f apps-docker-compose.yml up
 ```
 
-If everything goes well, you will be able to access the application on `http://localhost:3000`
+If everything goes well, you will be able to access the application on http://localhost:3000
+
+- On first screen app will ask you to a user to start with
+- In second screen, you can choose to person who you want to send the message
+- Now, you can send messages and share files
 
 ### Note
 
 You can change the docker image tag while building the application.
 If you do so, please make sure, you have updated the corresponding name in the
 [apps-docker-compose.yml](apps-docker-compose.yml)
+
+Please check [design-documents](design-documents) to get the overview of system design
+
+Please check [screenshots](screenshots) to get an idea about the application
