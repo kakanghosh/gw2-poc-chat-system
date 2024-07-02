@@ -48,9 +48,9 @@ docker compose -f services-docker-compose.yml -f apps-docker-compose.yml up
 
 If everything goes well, you will be able to access the application on http://localhost:3000
 
-- On first screen app will ask you to a user to start with
-- In second screen, you can choose to person who you want to send the message
-- Now, you can send messages and share files
+- On the first screen, the app will ask you to choose a user to start with.
+- On the second screen, you can choose the receiver to whom you want to send messages.
+- Now, you can send messages and share files.
 
 ### Note
 
