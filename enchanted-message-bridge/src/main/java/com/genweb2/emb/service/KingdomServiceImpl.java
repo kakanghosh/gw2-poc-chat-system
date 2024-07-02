@@ -17,9 +17,11 @@ public class KingdomServiceImpl implements KingdomService {
 
     @Override
     public List<KingdomDTO> getAll() {
-        return kingdomRepository.findAll()
-                                .stream()
-                                .map(kingdom -> new KingdomDTO(kingdom.getId(), kingdom.getName()))
-                                .toList();
+        var kingdoms = kingdomRepository.findAll()
+                                        .stream()
+                                        .map(kingdom -> new KingdomDTO(kingdom.getId(), kingdom.getName()))
+                                        .toList();
+        log.info("Getting all kingdoms data: {}", kingdoms);
+        return kingdoms;
     }
 }
