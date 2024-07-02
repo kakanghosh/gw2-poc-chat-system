@@ -55,7 +55,7 @@ If everything goes well, you will be able to access the application on http://lo
 ### Note
 
 You can change the docker image tag while building the application.
-If you do so, please make sure, you have updated the corresponding name in the
+If you do so, please make sure, you have updated the corresponding image name in the
 [apps-docker-compose.yml](apps-docker-compose.yml)
 
 Please check [design-documents](design-documents) to get the overview of system design
