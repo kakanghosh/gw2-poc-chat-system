@@ -3,7 +3,6 @@ import React from 'react';
 import HeaderMessage from '../header/HeaderMessage';
 import WriteMessageBox from '../WriteMessageBox';
 import useReadyToSendMesage from '@/app/hooks/useReadyToSendMesage';
-import styles from '@/app/styles/Watermark.module.css';
 
 export default function ChatWindowWrapper({
   children,
@@ -11,7 +10,6 @@ export default function ChatWindowWrapper({
   children: React.ReactNode;
 }>) {
   const { ready } = useReadyToSendMesage();
-
   return (
     <Box
       className={`root-container`}

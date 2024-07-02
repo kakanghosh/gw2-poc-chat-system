@@ -1,0 +1,30 @@
+services:
+  database_migration:
+    image: chat-db-migrate:2024-07-02-10-37
+    container_name: database_migration_container
+    restart: on-failure
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-jdbc:postgresql://postgres_db:5432/chat_db}
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-secret}
+  emb_chat_server:
+    image: emb-chat-server:2024-07-02-10-58
+    container_name: emb_chat_server_container
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-jdbc:postgresql://postgres_db:5432/chat_db}
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-secret}
+      SHOW_SQL_LOG: false
+      RABBITMQ_HOST: ${RABBITMQ_HOST:-rabbitmq}
+      RABBITMQ_PORT: ${RABBITMQ_PORT:-5672}
+      RABBITMQ_USERNAME: ${RABBITMQ_USERNAME:-guest}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-guest}
+      FILE_UPLOAD_PATH: ${FILE_UPLOAD_PATH:-/app/chat_server/files}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:3000}
+    ports:
+      - "8080:8080"
+    volumes:
+      - gw2_emb_chat_server:/app/chat_server/files
+volumes:
+  gw2_emb_chat_server:

@@ -17,6 +17,7 @@ export default function ChatMessageRow({
   receiver: User;
 }) {
   const othersMessage = !ownMessage;
+  const BASE_API_URL = process.env.NEXT_PUBLIC_BASE_API_URL;
 
   function showAvater(own: boolean) {
     return (
@@ -29,7 +30,7 @@ export default function ChatMessageRow({
   function showMessageContent() {
     const { file } = message;
     if (file) {
-      const fileLink = `http://localhost:8080/api/v1/files/${file.id}`;
+      const fileLink = `${BASE_API_URL}/api/v1/files/${file.id}`;
       const linkUi = (
         <Link href={fileLink} target='_blank'>
           {file.fileName}

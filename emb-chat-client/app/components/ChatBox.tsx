@@ -13,6 +13,7 @@ export default function ChatBox() {
   const [limit, setLimit] = useState(10);
   const [hasNext, setHasNext] = useState(false);
   const gotoTop = useRef(true);
+  const BASE_API_URL = process.env.NEXT_PUBLIC_BASE_API_URL;
 
   useEffect(() => {
     const chatContainer = chatContainerRef.current;
@@ -32,7 +33,7 @@ export default function ChatBox() {
 
   async function getChatHistory(sender: User, receiver: User) {
     const response = await fetch(
-      `http://localhost:8080/api/v1/chats/senders/${sender.id}/receivers/${receiver?.id}?pageNumber=${pageNumber}&limit=${limit}`
+      `${BASE_API_URL}/api/v1/chats/senders/${sender.id}/receivers/${receiver?.id}?pageNumber=${pageNumber}&limit=${limit}`
     );
     var { histories, total }: { histories: ChatMessage[]; total: number } =
       await response.json();

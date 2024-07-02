@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react';
 import { Kingdom, UseFetchState, User } from '@/app/models';
 
@@ -5,13 +6,13 @@ function useFetchUsersInKingdoms(kingdoms: Kingdom[]): UseFetchState<User[]> {
   const [data, setData] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
+  const BASE_API_URL = process.env.NEXT_PUBLIC_BASE_API_URL;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const urls: string[] = kingdoms.map(
-          (kingdom) =>
-            `http://localhost:8080/api/v1/users/kingdoms/${kingdom.id}`
+          (kingdom) => `${BASE_API_URL}/api/v1/users/kingdoms/${kingdom.id}`
         );
         const results = await Promise.all(
           urls.map(async (url) => await fetch(url))

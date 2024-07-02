@@ -17,11 +17,12 @@ import useFetchUsersInKingdoms from '@/app/hooks/useFetchUsersInKingdoms';
 import { useRouter } from 'next/navigation';
 
 export default function ChooseStartUser() {
+  const BASE_API_URL = process.env.NEXT_PUBLIC_BASE_API_URL;
   const router = useRouter();
   const { state, setState } = useGlobalState();
   const { kingdoms } = state;
   const { data } = useFetch<{ kingdoms: Kingdom[] }>(
-    'http://localhost:8080/api/v1/kingdoms'
+    `${BASE_API_URL}/api/v1/kingdoms`
   );
   const { data: users } = useFetchUsersInKingdoms(kingdoms);
 

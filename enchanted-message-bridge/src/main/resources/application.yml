@@ -31,8 +31,8 @@ logging:
               BasicBinder: TRACE
 
 file:
-  upload-path: /home/kakan/Workspace/gw2-poc-chat-system/uploads/
+  upload-path: ${FILE_UPLOAD_PATH:/home/kakan/Workspace/gw2-poc-chat-system/uploads/}
 
 web:
   config:
-    allowed-origins: http://localhost:3000
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000}

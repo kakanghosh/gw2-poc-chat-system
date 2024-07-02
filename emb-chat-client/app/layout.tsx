@@ -8,9 +8,7 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import CssBaseline from '@mui/material/CssBaseline';
 import { GlobalStateProvider } from '@/app/context/GlobalStateContext';
-import Box from '@mui/material/Box';
 import React from 'react';
-import HeaderMessage from './components/header/HeaderMessage';
 
 const inter = Inter({ subsets: ['latin'] });
 
