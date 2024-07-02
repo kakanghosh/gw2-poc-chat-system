@@ -26,5 +26,11 @@ services:
       - "8080:8080"
     volumes:
       - gw2_emb_chat_server:/app/chat_server/files
+  chat_client:
+    image: chat-client:2024-07-02-02-46
+    container_name: chat_client_container
+    restart: on-failure
+    ports:
+      - "3000:3000"
 volumes:
   gw2_emb_chat_server:
